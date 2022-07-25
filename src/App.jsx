@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact, setContacts,setFilterTerm } from 'redux/phonebookActions';
+import { addContact, deleteContact, setFilterTerm } from 'redux/phonebookActions';
 
 import { Filter, ContactList, Section, ContactForm } from './components';
 
@@ -17,35 +15,20 @@ const App = () => {
   const contacts = useSelector(state => state.phonebook.contacts);
   const filterTerm = useSelector(state => state.phonebook.filter);
 
-  useEffect(() => {
-    if (!!localStorage.getItem('contacts')) {
-      dispatch(setContacts(JSON.parse(localStorage.getItem('contacts'))));
-    } 
-  }, [dispatch]);
-
   const handleAddContact = newContactData => {
     const newContactEntity = {
-      id: nanoid(),
       ...newContactData,
     };
 
     if (!checkNewContactPresence(newContactEntity.name)) {
       dispatch(addContact(newContactEntity));
-      localStorage.setItem(
-        'contacts',
-        JSON.stringify([...contacts, newContactEntity])
-      );
     } else {
       alert(`${newContactEntity.name} is already in contacts!`);
     }
   };
 
   const handleDeleteContact = contactId => {
-
     dispatch(deleteContact(contactId));
-
-    const newContacts = contacts.filter(contact => contact.id !== contactId);
-    localStorage.setItem('contacts', JSON.stringify(newContacts));
   };
 
   const handleFilterContactsByName = ({ target: { value } }) => {
