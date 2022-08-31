@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 export const addContact = createAction(
   'phonebook/addContact',
-  function prepare(contactData) {
+  (contactData) => {
     return {
       payload: {
         id: nanoid(),

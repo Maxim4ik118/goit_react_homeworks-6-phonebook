@@ -13,18 +13,17 @@ import storage from 'redux-persist/lib/storage';
 
 import phonebook from './phonebookReducer';
 
-const persistConfig = {
-  key: 'root',
+const phonebookPersistConfig = {
+  key: 'user',
   storage,
-};
-
-const rootReducer = combineReducers({ phonebook });
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+  blacklist: ['filter']
+}
 
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
+  reducer: {
+    phonebook: persistReducer(phonebookPersistConfig, phonebook)
+  },
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
